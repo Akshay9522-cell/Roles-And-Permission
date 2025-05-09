@@ -17,9 +17,18 @@ export default function () {
        let api='/api/login'
 
        await axios.post(api,{email:email,password:password}).then((res)=>{
-          console.log(res.data)
-          toast.success("login successfully ")
-          router.push('/head/dashboard')
+          console.log(res.data.user.role)
+          localStorage.setItem('user',JSON.stringify(res.data))
+          if (res.data.user.role === 'vendor') {
+            router.push('/head/vendor');
+          } else if (res.data.user.role === 'Admin') {
+            router.push('/head/admin');
+          } else {
+            router.push('/head/dashboard');
+          }
+          
+          
+          
           
        })
      }

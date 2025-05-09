@@ -11,7 +11,8 @@ export async function POST(req){
      const{email,password}=data
 
      const user= await prisma.user.findFirst({
-        where:{email:email}
+        where:{email:email},
+        include: { role: true },
      })
       if(!user){
         return Response.json({success:false,message:"user not found"})
@@ -21,6 +22,11 @@ export async function POST(req){
           return Response.json({success:false,message:"password is invalid"})
     }
 
-     return Response.json({success:true,message:"system is under controll",data:user})
+     return Response.json({success:true,message:"system is under controll",data:user,  user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role?.name, 
+      },})
 }
      
